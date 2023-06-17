@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstdint>
+#include <algorithm>
 
 #include "./state.hpp"
 #include "../config.hpp"
@@ -13,7 +14,60 @@
  */
 int State::evaluate(){
   // [TODO] design your own evaluation function
-  return 0;
+  int now_piece, oppn_piece;
+  int ret=0;
+  auto self_board = this->board.board[this->player];
+  auto oppn_board = this->board.board[1 - this->player];
+
+  for(int i=0; i<BOARD_H; i++) {
+    for(int j=0; j<BOARD_W; j++) {
+      if(now_piece=self_board[i][j]) {
+        switch(now_piece) {
+          case 1: //pawn
+            ret+=2;
+            break;
+          case 2: //rook
+            ret+=6;
+            break;
+          case 3: //knight
+            ret+=7;
+            break;
+          case 4: //bishop
+            ret+=8;
+            break;
+          case 5: //queen
+            ret+=20;
+            break;
+          case 6: //king
+          default:
+            break;
+        }
+      }
+      if(oppn_piece=oppn_board[i][j]) {
+        switch(oppn_piece) {
+          case 1:
+            ret-=2;
+            break;
+          case 2:
+            ret-=6;
+            break;
+          case 3:
+            ret-=7;
+            break;
+          case 4:
+            ret-=8;
+            break;
+          case 5:
+            ret-=20;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  return ret;
 }
 
 
@@ -207,15 +261,14 @@ void State::get_legal_actions(){
       }
     }
   }
-  std::cout << "\n";
   this->legal_actions = all_actions;
 }
 
 
-const char piece_table[2][7][5] = {
-  {" ", "♙", "♖", "♘", "♗", "♕", "♔"},
-  {" ", "♟", "♜", "♞", "♝", "♛", "♚"}
-};
+//const char piece_table[2][7][5] = {
+  //{" ", "♙", "♖", "♘", "♗", "♕", "♔"},
+  //{" ", "♟", "♜", "♞", "♝", "♛", "♚"}
+//};
 /**
  * @brief encode the output for command line output
  * 
