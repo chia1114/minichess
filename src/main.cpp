@@ -9,7 +9,7 @@
 
 #include "config.hpp"
 
-//./build/main ./build/player_random ./baselines/linux/baseline1
+//./build/main ./baselines/linux/baseline1 ./build/player_minimax
 
 /*Board Size, Don't change!*/
 #define BOARD_H 6
