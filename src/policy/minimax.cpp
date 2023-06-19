@@ -34,6 +34,9 @@ Move minimax::get_move(State *state, int depth){
         ret=temp;
       }
     }
+    if(depthvalue==INT_MAX) {
+      return actions[(rand()+depth)%actions.size()];
+    }
     return ret;
   }
   else {
@@ -43,6 +46,9 @@ Move minimax::get_move(State *state, int depth){
         value=x;
         ret=temp;
       }
+    }
+    if(value==-INT_MAX) {
+      return actions[(rand()+depth)%actions.size()];
     }
     return ret;
   }

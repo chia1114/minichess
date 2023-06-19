@@ -9,7 +9,8 @@
 
 #include "config.hpp"
 
-//./build/main ./baselines/linux/baseline1 ./build/player_alphabeta
+//./build/main ./build/player_alphabeta ./baselines/linux/baseline2
+//./build/main ./baselines/linux/baseline2 ./build/player_alphabeta
 
 /*Board Size, Don't change!*/
 #define BOARD_H 6

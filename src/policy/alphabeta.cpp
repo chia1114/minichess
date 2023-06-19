@@ -6,7 +6,10 @@
 #include "../state/state.hpp"
 #include "./alphabeta.hpp"
 
-int getvalue(State* , int, int, int, int);
+int totaldepth;
+Move ans;
+
+int getvalue(State* , int, int, int, bool, bool);
 
 /**
  * @brief Randomly get a legal action
@@ -34,21 +37,21 @@ Move alphabeta::get_move(State *state, int depth){
         ret=temp;
       }
     }
-    return ret;
-  }
-  else {
-    for(auto temp:actions) {
-      x=getvalue(state->next_state(temp), depth-1, -INT_MAX, INT_MAX, 1);
-      if(x>value) {
-        value=x;
-        ret=temp;
-      }
+    if(depthvalue==INT_MAX) {
+      return actions[(rand()+depth)%actions.size()];
     }
     return ret;
   }
+  else {
+    x=getvalue(state, depth, -INT_MAX, INT_MAX, false, true);
+    if(x==-INT_MAX) {
+      return actions[(rand()+depth)%actions.size()];
+    }
+    return ans;
+  }
 }
 
-int getvalue(State* state, int depth, int alpha, int beta, int minimax) {
+int getvalue(State* state, int depth, int alpha, int beta, bool minimax, bool first) {
   int x;
 
   if(!state->legal_actions.size())
@@ -56,38 +59,23 @@ int getvalue(State* state, int depth, int alpha, int beta, int minimax) {
 
   auto actions = state->legal_actions;
 
-  if(depth==1) {
-    if(minimax==1) { //done
-      for(auto temp:actions) {
-        x=(state->next_state(temp))->evaluate();
-        if(x<beta) {
-          beta=x;
-          if(beta<=alpha) {
-            break;
-          }
-        }
-      }
-      return beta;
+  if(depth==0) {
+    if(minimax) {
+      return -state->evaluate();
     }
-    else { //done
-      for(auto temp:actions) {
-        x=(state->next_state(temp))->evaluate();
-        if(-x>alpha) {
-          alpha=-x;
-          if(alpha>=beta) {
-            break;
-          }
-        }
-      }
-      return alpha;
+    else {
+      return state->evaluate();
     }
   }
   else {
-    if(minimax==0) {
+    if(!minimax) {
       for(auto temp:actions) {
-        x=getvalue(state->next_state(temp), depth-1, alpha, beta, 1-minimax);
+        x=getvalue(state->next_state(temp), depth-1, alpha, beta, !minimax, false);
         if(x>alpha) {
           alpha=x;
+          if(first) {
+            ans=temp;
+          }
           if(alpha>=beta) {
             break;
           }
@@ -97,7 +85,7 @@ int getvalue(State* state, int depth, int alpha, int beta, int minimax) {
     }
     else {
       for(auto temp:actions) {
-        x=getvalue(state->next_state(temp), depth-1, alpha, beta, 1-minimax);
+        x=getvalue(state->next_state(temp), depth-1, alpha, beta, !minimax, false);
         if(x<beta) {
           beta=x;
           if(beta<=alpha) {
