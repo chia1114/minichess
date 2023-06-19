@@ -18,6 +18,7 @@ int getvalue(State* , int, int);
 Move minimax::get_move(State *state, int depth){
   int x;
   int value=-INT_MAX;
+  int depthvalue=INT_MAX;
   Move ret;
 
   if(!state->legal_actions.size())
@@ -25,20 +26,32 @@ Move minimax::get_move(State *state, int depth){
 
   auto actions = state->legal_actions;
 
-  for(auto temp:actions) {
-    x=getvalue(state->next_state(temp), depth-1, 1);
-    if(x>value) {
-      value=x;
-      ret=temp;
+  if(depth==1) {
+    for(auto temp:actions) {
+      x=(state->next_state(temp))->evaluate();
+      if(x<depthvalue) {
+        depthvalue=x;
+        ret=temp;
+      }
     }
+    return ret;
   }
-  return ret;
+  else {
+    for(auto temp:actions) {
+      x=getvalue(state->next_state(temp), depth-1, 1);
+      if(x>value) {
+        value=x;
+        ret=temp;
+      }
+    }
+    return ret;
+  }
 }
 
-int getvalue(State* state, int depth, int minimax) { //0:max 1:mini
+int getvalue(State* state, int depth, int minimax) {
   int x;
-  int myvalue=-INT_MAX;
-  int oppnvalue=INT_MAX;
+  int maxvalue=-INT_MAX;
+  int minvalue=INT_MAX;
 
   if(!state->legal_actions.size())
     state->get_legal_actions();
@@ -49,34 +62,34 @@ int getvalue(State* state, int depth, int minimax) { //0:max 1:mini
     if(minimax==1) {
       for(auto temp:actions) {
         x=(state->next_state(temp))->evaluate();
-        if(x<myvalue) {
-          myvalue=x;
+        if(x<minvalue) {
+          minvalue=x;
         }
       }
-      return myvalue;
+      return minvalue;
     }
     else {
       for(auto temp:actions) {
         x=(state->next_state(temp))->evaluate();
-        if(x<oppnvalue) {
-          oppnvalue=x;
+        if(x<minvalue) {
+          minvalue=x;
         }
       }
-      return -oppnvalue;
+      return -minvalue;
     }
   }
   else {
     if(minimax==0) {
       for(auto temp:actions) {
-        myvalue=std::max(getvalue(state->next_state(temp), depth-1, 1-minimax), myvalue);
+        maxvalue=std::max(getvalue(state->next_state(temp), depth-1, 1-minimax), maxvalue);
       }
-      return myvalue;
+      return maxvalue;
     }
     else {
       for(auto temp:actions) {
-        oppnvalue=std::min(getvalue(state->next_state(temp), depth-1, 1-minimax), oppnvalue);
+        minvalue=std::min(getvalue(state->next_state(temp), depth-1, 1-minimax), minvalue);
       }
-      return oppnvalue;
+      return minvalue;
     }
   }
 }

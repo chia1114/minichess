@@ -39,6 +39,8 @@ int State::evaluate(){
             ret+=20;
             break;
           case 6: //king
+           ret+=1000;
+           break;
           default:
             break;
         }
@@ -59,6 +61,9 @@ int State::evaluate(){
             break;
           case 5:
             ret-=20;
+            break;
+          case 6:
+            ret-=1000;
             break;
           default:
             break;
