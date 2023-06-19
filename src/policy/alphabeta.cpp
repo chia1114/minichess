@@ -50,8 +50,6 @@ Move alphabeta::get_move(State *state, int depth){
 
 int getvalue(State* state, int depth, int alpha, int beta, int minimax) {
   int x;
-  int maxvalue=-INT_MAX;
-  int minvalue=INT_MAX;
 
   if(!state->legal_actions.size())
     state->get_legal_actions();
@@ -59,45 +57,55 @@ int getvalue(State* state, int depth, int alpha, int beta, int minimax) {
   auto actions = state->legal_actions;
 
   if(depth==1) {
-    if(minimax==1) {
+    if(minimax==1) { //done
       for(auto temp:actions) {
         x=(state->next_state(temp))->evaluate();
-        if(x<minvalue) {
-          minvalue=x;
-          if(minvalue<alpha) {
+        if(x<beta) {
+          beta=x;
+          if(beta<=alpha) {
             break;
           }
         }
       }
-      return minvalue;
+      return beta;
     }
-    else {
+    else { //done
       for(auto temp:actions) {
         x=(state->next_state(temp))->evaluate();
-        if(x<minvalue) {
-          minvalue=x;
-          if(-minvalue>beta) {
+        if(-x>alpha) {
+          alpha=-x;
+          if(alpha>=beta) {
             break;
           }
         }
       }
-      return -minvalue;
+      return alpha;
     }
   }
   else {
     if(minimax==0) {
       for(auto temp:actions) {
         x=getvalue(state->next_state(temp), depth-1, alpha, beta, 1-minimax);
-        maxvalue=std::max(x, maxvalue);
+        if(x>alpha) {
+          alpha=x;
+          if(alpha>=beta) {
+            break;
+          }
+        }
       }
-      return maxvalue;
+      return alpha;
     }
     else {
       for(auto temp:actions) {
         x=getvalue(state->next_state(temp), depth-1, alpha, beta, 1-minimax);
-        minvalue=std::min(x, minvalue);
+        if(x<beta) {
+          beta=x;
+          if(beta<=alpha) {
+            break;
+          }
+        }
       }
-      return minvalue;
+      return beta;
     }
   }
 }
