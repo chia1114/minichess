@@ -6,7 +6,6 @@
 #include "../state/state.hpp"
 #include "./alphabeta.hpp"
 
-int totaldepth;
 Move ans;
 
 int getvalue(State* , int, int, int, bool, bool);
@@ -20,7 +19,6 @@ int getvalue(State* , int, int, int, bool, bool);
  */
 Move alphabeta::get_move(State *state, int depth){
   int x;
-  int value=-INT_MAX;
   int depthvalue=INT_MAX;
   Move ret;
 
