@@ -25,6 +25,12 @@ int State::evaluate(){
         switch(now_piece) {
           case 1: //pawn
             ret+=2;
+            if(this->player) {
+              ret+=i*0.1;
+            }
+            else {
+              ret-=i*0.1;
+            }
             break;
           case 2: //rook
             ret+=6;
@@ -49,6 +55,12 @@ int State::evaluate(){
         switch(oppn_piece) {
           case 1:
             ret-=2;
+            if(this->player) {
+              ret-=i*0.1;
+            }
+            else {
+              ret+=i*0.1;
+            }
             break;
           case 2:
             ret-=6;

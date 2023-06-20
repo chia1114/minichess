@@ -9,8 +9,8 @@
 
 #include "config.hpp"
 
-//./build/main ./build/player_minimax ./baselines/linux/baseline1
-//./build/main ./baselines/linux/baseline1 ./build/player_minimax
+//./build/main ./build/player_submission ./baselines/linux/baseline1
+//./build/main ./baselines/linux/baseline1 ./build/player_submission
 
 //./build/main ./build/player_alphabeta ./baselines/linux/baseline1
 //./build/main ./baselines/linux/baseline1 ./build/player_alphabeta
